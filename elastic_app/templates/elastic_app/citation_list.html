@@ -4,15 +4,15 @@
 <section>
   <ul>
     <li>
-      <a href="{% url 'app:upload' %}">Upload Citation</a>
+      <a href="{% url 'citations:upload' %}">Upload Citation</a>
     </li>
     {% if has_failures %}
     <li>
-      <a href="{% url 'app:failures' %}">View Failures</a>
+      <a href="{% url 'citations:failures' %}">View Failures</a>
     </li>
     {% endif %}
     <li>
-      <form action="{% url 'app:search' %}" method="get" enctype="multipart/form-data">
+      <form action="{% url 'citations:search' %}" method="get" enctype="multipart/form-data">
         {{ form }}
         <p><input type="submit" class="btn btn-primary" value="Go"/></p>
       </form>
