@@ -1,0 +1,90 @@
+{% extends "elastic_app/base.html" %}
+
+{% block "body" %}
+<section>
+  <ul>
+    <li>
+      <a href="{% url 'app:upload' %}">Upload Citation</a>
+    </li>
+    {% if has_failures %}
+    <li>
+      <a href="{% url 'app:failures' %}">View Failures</a>
+    </li>
+    {% endif %}
+    <li>
+      <form action="{% url 'app:search' %}" method="get" enctype="multipart/form-data">
+        {{ form }}
+        <p><input type="submit" class="btn btn-primary" value="Go"/></p>
+      </form>
+    </li>
+  </ul>
+</section>
+
+{% if page_obj %}
+<section>
+  <nav>
+    <ul class="pagination">
+      <li class="page-item {% if page_obj.has_previous %}{{ '' }}{% else %}{{ 'disabled' }}{% endif %}">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="page-link">previous</a>
+        {% else %}
+          <a href="javascript:;" class="page-link">previous</a>
+        {% endif %}
+      </li>
+
+      <span class="bg-white border border-left-0 border-right-0 p-1">
+        Page {{ page_obj.number }} of {{ paginator.num_pages }}
+      </span>
+
+      <li class="page-item {% if page_obj.has_next %}{{ '' }}{% else %}{{ 'disabled' }}{% endif %}">
+        {% if page_obj.has_next %}
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Next</a>
+        {% else %}
+        <a class="page-link" href="javascript:;">Next</a>
+        {% endif %}
+      </li>
+    </ul>
+  </nav>
+</section>
+{% endif %}
+
+<section class="mx-auto">
+    {% for citation in object_list %}
+      <article class="w-full lg:flex shadow mt-4">
+        <div class="w-full border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+          <h4 class="card-title">{{ citation.title }}</h4>
+          <p class="card-text">{{ citation.journal }}. {{ citation.date }};{{ citation.volume}}</p>
+        </div>
+      </article>
+    {% endfor %}
+</section>
+
+{% if page_obj %}
+<section>
+  <nav>
+    <ul class="pagination">
+      <li class="page-item {% if page_obj.has_previous %}{{ '' }}{% else %}{{ 'disabled' }}{% endif %}">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="page-link">previous</a>
+        {% else %}
+          <a href="javascript:;" class="page-link">previous</a>
+        {% endif %}
+      </li>
+
+      <span class="bg-white border border-left-0 border-right-0 p-1">
+        Page {{ page_obj.number }} of {{ paginator.num_pages }}
+      </span>
+
+      <li class="page-item {% if page_obj.has_next %}{{ '' }}{% else %}{{ 'disabled' }}{% endif %}">
+        {% if page_obj.has_next %}
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Next</a>
+        {% else %}
+        <a class="page-link" href="javascript:;">Next</a>
+        {% endif %}
+      </li>
+    </ul>
+  </nav>
+</section>
+{% endif %}
+
+{% endblock %}

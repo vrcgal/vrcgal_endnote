@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  
+  postgres:
+    image: postgres
+
+  redis:
+    image: redis:4.0.2-alpine
+    command: redis-server
+    ports: ["6379"]
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.3
+    environment:
+      - cluster.name=elastic-endnote
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:5.6.4
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch
+
+  web:
+    build: .
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+      - filedata:/tmp
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+      - elasticsearch
+      - worker
+
+  worker:
+    build: .
+    command: python3 manage.py rqworker high default low
+    volumes:
+      - .:/code
+      - filedata:/tmp
+    depends_on:
+      - redis
+
+volumes:
+  filedata:
+    driver: local
+  esdata:
+    driver: local

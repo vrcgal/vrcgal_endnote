@@ -1,0 +1,50 @@
+{% extends "elastic_app/base.html" %}
+
+{% block "body" %}
+<div>
+  <ul>
+    <li>
+      <a href="{% url 'app:index' %}">Home</a>
+    </li>
+  </ul>
+  
+  <div class="pagination">
+    <span class="step-links">
+      {% if failures.has_previous %}
+        <a href="?page={{ failures.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+        Page {{ failures.number }} of {{ failures.paginator.num_pages }}.
+      </span>
+
+      {% if failures.has_next %}
+        <a href="?page={{ failures.next_page_number }}">next</a>
+      {% endif %}
+    </span>
+  </div>
+
+  <ul>
+    {% for failure in failures %}
+      <li>{{ failure }}</li>
+    {% endfor %}
+  </ul>
+
+  <div class="pagination">
+    <span class="step-links">
+      {% if failures.has_previous %}
+        <a href="?page={{ failures.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+        Page {{ failures.number }} of {{ failures.paginator.num_pages }}.
+      </span>
+
+      {% if failures.has_next %}
+        <a href="?page={{ failures.next_page_number }}">next</a>
+      {% endif %}
+    </span>
+  </div>
+
+</div>
+{% endblock %}
