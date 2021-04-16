@@ -2,7 +2,7 @@ beautifulsoup4==4.6.0
 bs4==0.0.1
 click==6.7
 Django==2.0.2
-django-debug-toolbar==1.9.1
+django-debug-toolbar==1.11.1
 django-rq==0.9.6
 elasticsearch==5.5.2
 elasticsearch-dsl==5.4.0
